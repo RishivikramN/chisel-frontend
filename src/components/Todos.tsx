@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, Grid, Modal, Button, Form } from "semantic-ui-react";
 import TodoCard from "./TodoCard";
 import { useDispatch, useSelector } from "react-redux";
 import { Todo } from "../types/Todo";
-import { createTodo, deleteTodo, toggleTodoCompleted } from "../store/todo";
+import { ulid } from "ulid";
+import { CreateTodo, DeleteTodo, ToggleTodoCompleted } from "../api/services";
 interface BoardProps {
-  id: number;
+  id: string;
   title: string;
   visible: boolean;
-  onBoardClick: (boardId: number) => void;
+  onBoardClick: (boardId: string) => void;
 }
 
 function Todos({ id, title, visible }: BoardProps) {
@@ -27,7 +28,7 @@ function Todos({ id, title, visible }: BoardProps) {
   };
   const handleCreateTask = () => {
     const newTodo: Todo = {
-      id: todos.length + 1,
+      id: ulid(),
       title: newTodoTitle,
       description: newTodoDescription,
       completed: false,
@@ -35,14 +36,21 @@ function Todos({ id, title, visible }: BoardProps) {
     };
     setNewTodoTitle("");
     setNewTodoDescription("");
-    dispatch(createTodo(newTodo));
+    dispatch(CreateTodo({ todo: newTodo, boardId: id, dispatch }) as any);
     handleModalClose();
   };
-  const handleDeleteTask = (todoId: number) => {
-    dispatch(deleteTodo(todoId));
+  const handleDeleteTask = (todoId: string) => {
+    dispatch(DeleteTodo({ boardId: id, dispatch, todoId }) as any);
   };
-  const handleToggleCompleted = (todoId: number) => {
-    dispatch(toggleTodoCompleted(todoId));
+  const handleToggleCompleted = (todoId: string, isCompleted: boolean) => {
+    dispatch(
+      ToggleTodoCompleted({
+        boardId: id,
+        dispatch,
+        todoId,
+        completed: isCompleted,
+      }) as any
+    );
   };
 
   const newTodos = todos.filter(
@@ -65,6 +73,7 @@ function Todos({ id, title, visible }: BoardProps) {
                     id={todo.id}
                     title={todo.title}
                     description={todo.description}
+                    boardId={id}
                     completed={todo.completed}
                     onCheckboxChange={handleToggleCompleted}
                     onDelete={handleDeleteTask}
@@ -92,6 +101,7 @@ function Todos({ id, title, visible }: BoardProps) {
                     id={todo.id}
                     title={todo.title}
                     description={todo.description}
+                    boardId={id}
                     completed={todo.completed}
                     onCheckboxChange={handleToggleCompleted}
                     onDelete={handleDeleteTask}

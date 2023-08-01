@@ -1,5 +1,10 @@
 export interface Board {
-  id: number;
+  id: string;
   title: string;
-  visible: boolean;
+  visible?: boolean;
+}
+
+export interface EditBoard {
+  boardId: string | null;
+  title: string;
 }

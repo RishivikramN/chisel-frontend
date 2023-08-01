@@ -1,7 +1,13 @@
 export interface Todo {
-  id: number;
+  id: string;
   title: string;
   description: string;
   completed: boolean;
-  boardId: number;
+  boardId: string;
+}
+
+export interface EditTodo {
+  todoId: string | null;
+  title: string;
+  description: string;
 }

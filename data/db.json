@@ -1,20 +1,46 @@
 {
   "boards": [
     {
-      "id": "7cded5a1-3f83-4cbc-b061-d27d15b28bdd",
-      "title": "Board 1"
+      "title": "Scrum",
+      "id": "01H6QVRJ39EY384J8J5VZT4PZQ"
     },
     {
-      "id": "d1027f34-6e78-4a31-a09a-638a1a521260",
+      "id": "01H6QVRVYS04KB367RZ464N259",
       "title": "Board 2"
     },
     {
-      "id": "f2ff6dad-7274-4395-a2a3-131f32400e9d",
-      "title": "Board 3"
+      "id": "01H6QY5CRAKRJ3XYNV1K1JHFK3",
+      "title": "Board 5"
+    }
+  ],
+  "todos": [
+    {
+      "id": "01H6QYD8X04QDMPAJ346FJHNFF",
+      "title": "Regression Tests",
+      "description": "Finish ASAP",
+      "completed": false,
+      "boardId": "01H6QVRJ39EY384J8J5VZT4PZQ"
     },
     {
-      "id": "c763ef8b-3a38-4399-a62f-c65732726fa0",
-      "title": "Board 4"
+      "id": "01H6QYD8X1YQTK0HPP4NXYHV6E",
+      "title": "Auth Designs",
+      "description": "Figma file attached",
+      "completed": true,
+      "boardId": "01H6QVRJ39EY384J8J5VZT4PZQ"
+    },
+    {
+      "boardId": "01H6QVRJ39EY384J8J5VZT4PZQ",
+      "completed": true,
+      "description": "efefef",
+      "id": "01H6R0Y680H7EW5CVT9XE1TKBJ",
+      "title": "Welcome to the new task"
+    },
+    {
+      "id": "01H6R1T8B024R0Z1FMRNXHQEYA",
+      "title": "Board 2 Task",
+      "description": "welcome memebers",
+      "completed": true,
+      "boardId": "01H6QVRVYS04KB367RZ464N259"
     }
   ]
 }

@@ -1,10 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Board } from "../types/Board";
+import { GetBoards } from "../api/services";
+import { EditBoard } from "../types/Board";
 
 export const boardSlice = createSlice({
   name: "board",
   initialState: {
     boards: [] as Board[],
+    loading: false,
+    error: null,
+    editBoard: { boardId: null, title: "" } as EditBoard,
   },
   reducers: {
     createBoard: (state, action) => {
@@ -19,6 +24,11 @@ export const boardSlice = createSlice({
 
       state.boards = [...updatedBoards, newBoard];
     },
+
+    updateBoardState: (state, action) => {
+      const { boardId, title } = action.payload as EditBoard;
+      state.editBoard = { boardId, title };
+    },
     deleteBoard: (state, action) => {
       const boardId = action.payload;
       const updatedBoards = state.boards.filter(
@@ -31,7 +41,6 @@ export const boardSlice = createSlice({
       }
 
       state.boards = [...updatedBoards];
-      console.log({ brd: state.boards });
     },
     toggleBoardVisibility: (state, action) => {
       const boardId = action.payload;
@@ -42,8 +51,22 @@ export const boardSlice = createSlice({
       );
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(GetBoards.fulfilled, (state, action) => {
+      const boards = action.payload as Board[];
+      if (boards.length) boards[0].visible = true;
+      state.boards = boards;
+    });
+    builder.addCase(GetBoards.rejected, (state, action) => {
+      state.boards = [];
+    });
+  },
 });
 
-export const { createBoard, deleteBoard, toggleBoardVisibility } =
-  boardSlice.actions;
+export const {
+  createBoard,
+  deleteBoard,
+  toggleBoardVisibility,
+  updateBoardState,
+} = boardSlice.actions;
 export default boardSlice.reducer;
