@@ -3,12 +3,14 @@ import axios from "axios";
 import { Board } from "../types/Board";
 import { Todo } from "../types/Todo";
 
-const BASE_URL = "http://localhost:3500";
+const BASE_URL = "http://localhost:3500/api/v1";
 
 export const GetBoards = createAsyncThunk(
   "boards/getBoards",
   async (params: { dispatch: any }) => {
-    const boards: Board[] = await (await axios.get(`${BASE_URL}/boards`)).data;
+    const boards: Board[] = await (
+      await axios.get(`${BASE_URL}/boards/all`)
+    ).data.boards;
     if (boards.length) params.dispatch(GetTodos({ boardId: boards[0].id }));
     return boards;
   }
@@ -33,7 +35,7 @@ export const UpdateBoard = createAsyncThunk(
   "boards/updateBoard",
   async (params: { boardId: string; title: string; dispatch: any }) => {
     const { boardId, title, dispatch } = params;
-    await axios.put(`${BASE_URL}/boards/${boardId}`, { title });
+    await axios.patch(`${BASE_URL}/boards`, { title, id: boardId });
     dispatch(GetBoards({ dispatch: params.dispatch }));
   }
 );
@@ -42,8 +44,8 @@ export const GetTodos = createAsyncThunk(
   "todo/getTodos",
   async (params: { boardId: string }) => {
     return await (
-      await axios.get(`${BASE_URL}/todos?boardId=${params.boardId}`)
-    ).data;
+      await axios.get(`${BASE_URL}/todos/${params.boardId}`)
+    ).data.todos;
   }
 );
 
@@ -60,21 +62,16 @@ export const UpdateTodo = createAsyncThunk(
   "todo/updateTodo",
   async (params: { todo: Todo; dispatch: any }) => {
     const { todo, dispatch } = params;
-    await axios.put(`${BASE_URL}/todos/${todo.id}`, todo);
+    await axios.patch(`${BASE_URL}/todos`, todo);
     dispatch(GetTodos({ boardId: todo.boardId }));
   }
 );
 
 export const ToggleTodoCompleted = createAsyncThunk(
   "todo/toggleTodoCompleted",
-  async (params: {
-    todoId: string;
-    completed: boolean;
-    boardId: string;
-    dispatch: any;
-  }) => {
-    const { todoId, completed, boardId, dispatch } = params;
-    await axios.patch(`${BASE_URL}/todos/${todoId}`, { completed });
+  async (params: { todoId: string; boardId: string; dispatch: any }) => {
+    const { todoId, boardId, dispatch } = params;
+    await axios.patch(`${BASE_URL}/todos/toggle-completed/${todoId}`);
     dispatch(GetTodos({ boardId }));
   }
 );

@@ -48,7 +48,6 @@ function Todos({ id, title, visible }: BoardProps) {
         boardId: id,
         dispatch,
         todoId,
-        completed: isCompleted,
       }) as any
     );
   };
