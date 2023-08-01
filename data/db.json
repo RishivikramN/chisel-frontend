@@ -1,0 +1,20 @@
+{
+  "boards": [
+    {
+      "id": "7cded5a1-3f83-4cbc-b061-d27d15b28bdd",
+      "title": "Board 1"
+    },
+    {
+      "id": "d1027f34-6e78-4a31-a09a-638a1a521260",
+      "title": "Board 2"
+    },
+    {
+      "id": "f2ff6dad-7274-4395-a2a3-131f32400e9d",
+      "title": "Board 3"
+    },
+    {
+      "id": "c763ef8b-3a38-4399-a62f-c65732726fa0",
+      "title": "Board 4"
+    }
+  ]
+}
