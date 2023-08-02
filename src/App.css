@@ -1,3 +1,30 @@
+:root {
+  --primary-color: #7b64b0;
+  --workarea-color: #f7f9fb;
+  --secondary-color: #777777;
+  --hover-color: #f9f6ff;
+}
+
+html {
+  user-select: none;
+}
+
+.primary-bg {
+  background-color: var(--primary-color);
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.workarea-bg {
+  background-color: var(--workarea-color);
+}
+
+.text-secondary {
+  color: var(--secondary-color);
+}
+
 .centered-container {
   height: 100vh;
   display: flex;
@@ -17,6 +44,24 @@
   align-items: center;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically center the content */
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.workarea-header-customize {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 4rem;
+}
+
 .text-bold {
   font-weight: bold;
 }
@@ -26,11 +71,11 @@
 }
 
 .scrollable-container {
-  height: 300px;
+  height: 60rem;
   overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 5px;
   margin-bottom: 10px;
+  background-color: #ffffff;
+  padding-bottom: 2rem;
 }
 
 .scrollable-container::-webkit-scrollbar {
@@ -55,11 +100,214 @@
   background-color: #f1f1f1; /* Color of the scrollbar track on hover */
 }
 
-.tasks-container {
+.boards-container {
   padding: 10px;
+  margin-top: 2rem;
+  margin-left: 2rem;
 }
 
+.board-action-header {
+  margin-bottom: 2rem;
+}
+
+.tasks-container {
+  padding: 10px;
+  margin-top: 1rem;
+}
+
+.text-medium {
+  font-size: medium;
+}
+
+.text-600 {
+  font-weight: 600;
+}
+
+.main-content {
+  margin-top: 4rem;
+}
+
+.workarea-header {
+  width: 101%;
+  height: 6rem;
+  background-color: white;
+  margin-left: -13px;
+}
+
+.board-heading {
+  padding-left: 5rem;
+  padding-top: 2rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.brand-logo {
+  height: 8rem;
+  margin-left: 4rem;
+  margin-top: -1.5rem;
+  padding-top: 2rem;
+  width: 100%;
+}
+
+.brand {
+  margin-left: 1rem;
+}
+
+.success-btn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 16px 10px 16px;
+  border-radius: 4px;
+  border: none;
+  margin-right: 0.5rem;
+}
+
+.cancel-btn {
+  color: gray;
+  font-weight: 600;
+  background-color: #ebeaea;
+  padding: 10px 16px 10px 16px;
+  border: none;
+  border-radius: 4px;
+  margin-right: 1rem;
+}
+
+.custom-card {
+  border: none;
+  cursor: pointer;
+  padding: 2rem 2rem 2rem 2rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.custom-card:hover {
+  background-color: var(--hover-color);
+}
+
+.board-menu-item {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  padding-left: 4rem;
+}
+
+.board-menu-item.board-active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.board-menu-item:not(.board-active):hover {
+  background-color: var(--hover-color);
+}
+
+.sidebar {
+  margin-right: -1.8rem;
+  margin-left: -2.7rem;
+}
+
+.input-error {
+  color: red;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.settings {
+  background-color: white;
+  width: 10rem;
+  height: 6rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 1rem;
+  right: 5rem;
+  z-index: 10;
+  position: absolute;
+}
+
+.setting-item {
+  height: 50%;
+  justify-content: space-between;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+}
+
+.padding-x-1 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 /** Layout Utils **/
+.font-family {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+h3 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.card-action {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+}
+
+.action-content-hover {
+  display: none;
+  flex-direction: row;
+}
+
+.custom-card:hover .action-content-hover {
+  display: block;
+}
+.card-title {
+  text-align: left;
+  font-weight: 600;
+  font-size: medium;
+  width: 50%;
+  margin-left: 20px;
+}
+
+.card-description {
+  text-align: justify;
+  width: 80%;
+  margin-left: 35px;
+  padding-top: 1rem;
+}
+
 .pl-2 {
   padding-left: 0.5rem;
+}
+
+.pr-2 {
+  padding-right: 2rem;
+}
+
+.p-4 {
+  padding: 4px 4px 4px 4px;
+}
+
+.mr-1 {
+  margin-right: 0.5rem;
+}
+
+.border {
+  border: 1px solid #ddd;
+}
+
+.todo-heading {
+  margin-left: 10px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.todo-container {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  max-width: 500px;
+  margin: 0 auto;
+  height: 60rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.cog-icon {
+  margin-top: 2rem;
 }

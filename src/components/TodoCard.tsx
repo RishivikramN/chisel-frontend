@@ -25,6 +25,7 @@ function TodoCard({
   onDelete,
 }: TodoCardProps) {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [inputError, setInputError] = useState<boolean>(false);
   const editTodo = useSelector((state: any) => state.todo.editTodo) as EditTodo;
   const dispatch = useDispatch();
   const handleModalOpen = (todoId: string) => {
@@ -41,6 +42,12 @@ function TodoCard({
   };
 
   const handleEditTodo = () => {
+    if (!editTodo.title.length || !editTodo.description.length) {
+      setInputError(true);
+      return;
+    } else {
+      setInputError(false);
+    }
     if (editTodo.todoId)
       dispatch(
         UpdateTodo({
@@ -59,36 +66,47 @@ function TodoCard({
   };
   return (
     <>
-      <Card>
-        <Card.Content>
-          <div className="flex-center">
-            <div>
-              <Card.Header className="text-bold">{title}</Card.Header>
-              <Card.Description>{description}</Card.Description>
-            </div>
-            <div className="flex-center">
-              {!completed && (
-                <input
-                  type="checkbox"
-                  onChange={(e) => onCheckboxChange(id, e.target.checked)}
-                />
-              )}
-              <div className="pl-2">
-                {!completed && (
-                  <Icon
-                    className="edit alternate outline cursor-pointer"
-                    onClick={() => handleModalOpen(id)}
-                  />
-                )}
-                <Icon
-                  className="trash alternate outline cursor-pointer"
-                  onClick={() => onDelete(id)}
-                />
-              </div>
+      <div className="custom-card">
+        <div className="card-action">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              width: "90%",
+            }}
+          >
+            {!completed ? (
+              <input
+                type="checkbox"
+                onChange={(e) => onCheckboxChange(id, e.target.checked)}
+                style={{ padding: "8px" }}
+              />
+            ) : (
+              <div style={{ width: "13px" }} />
+            )}
+            <div className="card-title">
+              {title.length > 22 ? `${title.substring(0, 21)}...` : title}
             </div>
           </div>
-        </Card.Content>
-      </Card>
+
+          <div className="action-content-hover">
+            {!completed && (
+              <Icon
+                className="edit alternate outline cursor-pointer"
+                onClick={() => handleModalOpen(id)}
+              />
+            )}
+            <Icon
+              className="trash alternate outline cursor-pointer"
+              onClick={() => onDelete(id)}
+            />
+          </div>
+        </div>
+        {/** description */}
+        <div>
+          <div className="card-description">{description}</div>
+        </div>
+      </div>
       <Modal open={modalOpen} onClose={handleModalClose} size="mini">
         <Modal.Header>Update the Task</Modal.Header>
         <Modal.Content>
@@ -121,14 +139,25 @@ function TodoCard({
               />
             </Form.Field>
           </Form>
+          {inputError && (
+            <p className="input-error">
+              Please enter both title and description
+            </p>
+          )}
         </Modal.Content>
         <Modal.Actions>
-          <Button negative onClick={handleModalClose}>
+          <button
+            className="cancel-btn cursor-pointer"
+            onClick={handleModalClose}
+          >
             Cancel
-          </Button>
-          <Button positive onClick={handleEditTodo}>
+          </button>
+          <button
+            className="success-btn cursor-pointer"
+            onClick={handleEditTodo}
+          >
             Update Todo
-          </Button>
+          </button>
         </Modal.Actions>
       </Modal>
     </>

@@ -10,6 +10,10 @@ export const boardSlice = createSlice({
     loading: false,
     error: null,
     editBoard: { boardId: null, title: "" } as EditBoard,
+    activeBoard: {
+      id: "",
+      title: "",
+    },
   },
   reducers: {
     createBoard: (state, action) => {
@@ -44,18 +48,29 @@ export const boardSlice = createSlice({
     },
     toggleBoardVisibility: (state, action) => {
       const boardId = action.payload;
-      state.boards = state.boards.map((board) =>
-        board.id === boardId
-          ? { ...board, visible: !board.visible }
-          : { ...board, visible: false }
-      );
+      const activeBoard = { id: "", title: "" };
+
+      state.boards = state.boards.map((board) => {
+        if (board.id === boardId) {
+          activeBoard.title = board.title;
+          activeBoard.id = board.id;
+          return { ...board, visible: true };
+        } else return { ...board, visible: false };
+      });
+      state.activeBoard = activeBoard;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(GetBoards.fulfilled, (state, action) => {
       const boards = action.payload as Board[];
+      const activeBoard = { id: "", title: "" };
       if (boards.length) boards[0].visible = true;
       state.boards = boards;
+      if (boards[0] && boards[0].title) {
+        activeBoard.id = boards[0].id;
+        activeBoard.title = boards[0].title;
+        state.activeBoard = activeBoard;
+      }
     });
     builder.addCase(GetBoards.rejected, (state, action) => {
       state.boards = [];

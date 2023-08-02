@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { Card, Grid, Modal, Button, Form } from "semantic-ui-react";
+import { Card, Grid, Modal, Button, Form, Icon } from "semantic-ui-react";
 import TodoCard from "./TodoCard";
 import { useDispatch, useSelector } from "react-redux";
 import { Todo } from "../types/Todo";
 import { ulid } from "ulid";
 import { CreateTodo, DeleteTodo, ToggleTodoCompleted } from "../api/services";
+import { toast } from "react-toastify";
+
 interface BoardProps {
   id: string;
   title: string;
   visible: boolean;
-  onBoardClick: (boardId: string) => void;
 }
 
 function Todos({ id, title, visible }: BoardProps) {
@@ -19,6 +20,7 @@ function Todos({ id, title, visible }: BoardProps) {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [newTodoTitle, setNewTodoTitle] = useState<string>("");
   const [newTodoDescription, setNewTodoDescription] = useState<string>("");
+  const [inputError, setInputError] = useState<boolean>(false);
 
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => {
@@ -34,9 +36,16 @@ function Todos({ id, title, visible }: BoardProps) {
       completed: false,
       boardId: id,
     };
+
+    if (!newTodoTitle.length || !newTodoDescription.length) {
+      setInputError(true);
+      return;
+    } else {
+      setInputError(false);
+    }
+    dispatch(CreateTodo({ todo: newTodo, boardId: id, dispatch }) as any);
     setNewTodoTitle("");
     setNewTodoDescription("");
-    dispatch(CreateTodo({ todo: newTodo, boardId: id, dispatch }) as any);
     handleModalClose();
   };
   const handleDeleteTask = (todoId: string) => {
@@ -59,57 +68,89 @@ function Todos({ id, title, visible }: BoardProps) {
     (todo) => todo.completed && todo.boardId === id
   );
   return (
-    <Grid columns={2} textAlign="center" divided>
+    <Grid columns={2} textAlign="center">
       <Grid.Column style={{ display: visible ? "block" : "none" }}>
-        <h3 className="ui header">Todo</h3>
-        <div className="scrollable-container">
-          <div className="tasks-container">
-            <Card.Group>
-              {newTodos.length ? (
-                newTodos.map((todo) => (
-                  <TodoCard
-                    key={todo.id}
-                    id={todo.id}
-                    title={todo.title}
-                    description={todo.description}
-                    boardId={id}
-                    completed={todo.completed}
-                    onCheckboxChange={handleToggleCompleted}
-                    onDelete={handleDeleteTask}
-                  />
-                ))
-              ) : (
-                <div>No Todos Pending</div>
-              )}
-            </Card.Group>
+        <div className="todo-container">
+          <div className="flex-center">
+            <h3 style={{ marginTop: "24px", marginLeft: "40px" }}>
+              <span className="mr-1"> 🎯 </span>To do
+            </h3>
+            <Icon
+              name="plus"
+              className="cursor-pointer pr-2"
+              onClick={handleModalOpen}
+            />
+          </div>
+          <div className="scrollable-container">
+            <div className="tasks-container">
+              <Card.Group itemsPerRow={1} stackable centered>
+                {newTodos.length ? (
+                  newTodos.map((todo) => (
+                    <TodoCard
+                      key={todo.id}
+                      id={todo.id}
+                      title={todo.title}
+                      description={todo.description}
+                      boardId={id}
+                      completed={todo.completed}
+                      onCheckboxChange={handleToggleCompleted}
+                      onDelete={handleDeleteTask}
+                    />
+                  ))
+                ) : (
+                  <p
+                    style={{
+                      paddingTop: "50%",
+                    }}
+                  >
+                    No Todos Pending
+                  </p>
+                )}
+              </Card.Group>
+            </div>
           </div>
         </div>
-        <Button primary onClick={handleModalOpen}>
-          Create new Task
-        </Button>
       </Grid.Column>
       <Grid.Column style={{ display: visible ? "block" : "none" }}>
-        <h3 className="ui header">Done</h3>
-        <div className="scrollable-container">
-          <div className="tasks-container">
-            <Card.Group>
-              {completedTodos.length ? (
-                completedTodos.map((todo) => (
-                  <TodoCard
-                    key={todo.id}
-                    id={todo.id}
-                    title={todo.title}
-                    description={todo.description}
-                    boardId={id}
-                    completed={todo.completed}
-                    onCheckboxChange={handleToggleCompleted}
-                    onDelete={handleDeleteTask}
-                  />
-                ))
-              ) : (
-                <p>{"Nothing is completed :("}</p>
-              )}
-            </Card.Group>
+        <div className="todo-container">
+          <div className="flex-center">
+            <h3
+              style={{
+                marginTop: "24px",
+                marginLeft: "40px",
+                marginBottom: "10px",
+              }}
+            >
+              <span className="mr-1"> ✅ </span>Done
+            </h3>
+          </div>
+          <div className="scrollable-container">
+            <div className="tasks-container">
+              <Card.Group itemsPerRow={1} stackable centered>
+                {completedTodos.length ? (
+                  completedTodos.map((todo) => (
+                    <TodoCard
+                      key={todo.id}
+                      id={todo.id}
+                      title={todo.title}
+                      description={todo.description}
+                      boardId={id}
+                      completed={todo.completed}
+                      onCheckboxChange={handleToggleCompleted}
+                      onDelete={handleDeleteTask}
+                    />
+                  ))
+                ) : (
+                  <p
+                    style={{
+                      paddingTop: "50%",
+                    }}
+                  >
+                    {"Nothing to show"}
+                  </p>
+                )}
+              </Card.Group>
+            </div>
           </div>
         </div>
       </Grid.Column>
@@ -124,6 +165,7 @@ function Todos({ id, title, visible }: BoardProps) {
                 placeholder="Enter task title"
                 value={newTodoTitle}
                 onChange={(e) => setNewTodoTitle(e.target.value)}
+                required
               />
             </Form.Field>
             <Form.Field>
@@ -132,17 +174,29 @@ function Todos({ id, title, visible }: BoardProps) {
                 placeholder="Enter task description"
                 value={newTodoDescription}
                 onChange={(e) => setNewTodoDescription(e.target.value)}
+                required
               />
             </Form.Field>
           </Form>
+          {inputError && (
+            <p className="input-error">
+              Please enter both title and description
+            </p>
+          )}
         </Modal.Content>
         <Modal.Actions>
-          <Button negative onClick={handleModalClose}>
+          <button
+            className="cancel-btn cursor-pointer"
+            onClick={handleModalClose}
+          >
             Cancel
-          </Button>
-          <Button positive onClick={handleCreateTask}>
+          </button>
+          <button
+            className="success-btn cursor-pointer"
+            onClick={handleCreateTask}
+          >
             Create Task
-          </Button>
+          </button>
         </Modal.Actions>
       </Modal>
     </Grid>
