@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Card, Grid, Modal, Button, Form, Icon } from "semantic-ui-react";
+import { Card, Grid, Modal, Form, Icon } from "semantic-ui-react";
 import TodoCard from "./TodoCard";
 import { useDispatch, useSelector } from "react-redux";
 import { Todo } from "../types/Todo";
 import { ulid } from "ulid";
 import { CreateTodo, DeleteTodo, ToggleTodoCompleted } from "../api/services";
-import { toast } from "react-toastify";
 
 interface BoardProps {
   id: string;

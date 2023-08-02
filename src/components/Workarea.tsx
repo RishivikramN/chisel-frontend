@@ -1,8 +1,7 @@
-import { Button, Form, Grid, Icon, Modal, Segment } from "semantic-ui-react";
+import { Form, Grid, Icon, Modal, Segment } from "semantic-ui-react";
 import Todos from "./Todos";
 import { useDispatch, useSelector } from "react-redux";
 import { Board, EditBoard } from "../types/Board";
-import { COLORS } from "../colors";
 import { useEffect, useState } from "react";
 import { updateBoardState } from "../store/board";
 import { DeleteBoard, UpdateBoard } from "../api/services";
@@ -76,7 +75,7 @@ function WorkArea() {
 
   return (
     <>
-      <Grid.Column width={13} style={{ backgroundColor: COLORS.WorkArea }}>
+      <Grid.Column width={13} className="workarea-bg">
         <div className="workarea-header workarea-header-customize">
           <h2 className="board-heading">{activeBoard?.title}</h2>
           <div className="cog-icon">

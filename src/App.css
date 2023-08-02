@@ -127,6 +127,10 @@ html {
   margin-top: 4rem;
 }
 
+.workarea-bg {
+  background-color: var(--workarea-color);
+}
+
 .workarea-header {
   width: 101%;
   height: 6rem;

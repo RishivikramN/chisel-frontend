@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, Form, Icon, Modal } from "semantic-ui-react";
+import { Form, Icon, Modal } from "semantic-ui-react";
 import { UpdateTodo } from "../api/services";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTodoState } from "../store/todo";
